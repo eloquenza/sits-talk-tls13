@@ -6,22 +6,55 @@
 % Define packages required to use this class
 \RequirePackage{ifthen}
 \RequirePackage{etex}
-\RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{lmodern}
-\RequirePackage{amssymb}
 \RequirePackage{amsmath}
-\RequirePackage{graphicx}
-\RequirePackage{blindtext}
-\RequirePackage{etoolbox}
 \RequirePackage{FiraSans}
-\RequirePackage{appendixnumberbeamer}
 \RequirePackage{xspace}
 \RequirePackage{booktabs}
 \RequirePackage[scale=2]{ccicons}
 \RequirePackage{pgfplots}
-\RequirePackage{babel}
 \RequirePackage{pgfpages}
+
+% Sprachpaket für Deutsch (Umlaute, Trennung,deutsche Überschriften)
+\RequirePackage[ngerman, english]{babel}
+\RequirePackage{blindtext}
+%Graphikeinbindung, Hyperref (alles klickbar, Bookmarks),
+%Math. Symbole aus AmsTeX
+\RequirePackage{graphicx,amssymb,url,atbegshi,etoolbox}
+
+\RequirePackage[backend=biber,natbib=true, style=numeric, citestyle=numeric, maxnames=7, minnames=1, maxcitenames=2, url=true]{biblatex}
+% Umlaute und über Tastatur einzugeben
+\RequirePackage[utf8]{inputenc}
+% add table of contents and other tables automatically
+\RequirePackage[nottoc]{tocbibind}
+\RequirePackage[toc,page]{appendix}
+\RequirePackage{appendixnumberbeamer}
+
+%% json related packages
+% dont use bera, can't get it at the work PC
+%\RequirePackage{bera} % optional: just to have a nice mono-spaced font
+\RequirePackage{listings}
+\RequirePackage{textcomp}
+\RequirePackage{tabularx}
+\RequirePackage{pifont}
+\RequirePackage{pdfpages}
+\RequirePackage{float}
+
+\RequirePackage{xcolor}
+
+\RequirePackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor={hsh-f4-orange},
+    citecolor={hsh-f4-orange},
+    urlcolor={blue!80!black}
+}
+
+\RequirePackage{xr-hyper}
+
+\RequirePackage[autostyle=true,german=quotes,thresholdtype=words,threshold=20]{csquotes}
+
 \usepgfplotslibrary{dateplot}
 %\RequirePackage{url,hyperref}
 
@@ -44,7 +77,7 @@
 \geometry{paperwidth=16cm,paperheight=9cm}
 
 % allow notes to be present
-\setbeameroption{show notes on second screen=right}
+% \setbeameroption{show notes on second screen=right}
 
 % Add new command to change size of a hrulefill
 \makeatletter
@@ -61,7 +94,6 @@ breaklinks=true,urlcolor=Blue}
 \setbeamercovered{invisible}
 \setbeamertemplate{theorems}[numbered]
 \setbeamertemplate{captions}[numbered]
-\setbeamertemplate{bibliography item}[book]
  \raggedright
 \setbeamertemplate{items}[circle]
 \setbeamertemplate{section in toc}[sections numbered]
