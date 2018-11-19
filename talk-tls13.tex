@@ -1,6 +1,12 @@
+% arara: pdflatex: { shell: true, draft: true }
+% arara: makeglossaries
+% arara: biber
+% arara: pdflatex: { shell: true, synctex: true }
+% arara: pdflatex: { shell: true, synctex: true }
+
 \documentclass{f4_beamer_metropolis}
 
-\title{TLS v1.3}
+\title{Transport Layer Security 1.3}
 \subtitle{SITS WS18/19}
 \author{Dennis Grabowski, B.Sc}
 \date{28.11.2018}
@@ -12,7 +18,9 @@
     \tableofcontents[hideallsubsections]
   \end{frame}
 
-\section{Motivation}
+\section{Introduction}
+
+\subsection{Motivation}
 
 \begin{frame}{TLS 1.2}
 \begin{itemize}
@@ -33,6 +41,75 @@
   \end{itemize}
 \end{frame}
 
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\newcolumntype{S}{>{\centering\small}X}
+
+\subsection{Browser and library support}
+
+\begin{frame}{Which browsers support TLS 1.3?}
+  \begin{tabularx}{\textwidth}{
+      |>{\hsize=0.2\hsize} Y |
+      >{\hsize=0.5\hsize} S |
+      >{\hsize=0.2\hsize} Y |
+      >{\hsize=0.1\hsize} Y |
+    }
+    \hline
+    \textbf{Browser} & \textbf{Platforms} & \textbf{Versions} & \textbf{TLS 1.3}\\ \hline
+    \multirow{2}{*}{Google Chrome}
+        & \multirow{2}{*}{\parbox{6cm}{Windows (7+), Linux, Android (4.1+), Chrome OS, macOS (10.10+), iOS (9.0+)}}
+          & 54 - 69 & \cellcolor{yellow!50}Disabled \\ \cline{3-4}
+    & & 70 & \cellcolor{green!50}Yes \\ \hline
+    \multirow{2}{*}[-0.75em]{Mozilla Firefox}
+        & \multirow{2}{*}[-0.75em]{\parbox{6cm}{Windows (7+), Linux, Android (4.1+), macOS (10.9+), iOS (9.0+)}}
+          & 49 - 62, ESR 52.0 - 60.3 & \cellcolor{yellow!50}Disabled \\ \cline{3-4}
+    & & 63 & \cellcolor{green!50}Yes \\ \hline
+    Internet Explorer & Windows (7+), Windows Server (2008 R2+) & IE 11 & \cellcolor{red!50}No \\ \hline
+    \multirow{2}{*}{Microsoft Edge}
+        & Windows 10 Mobile, Xbox & Edge 15 & \cellcolor{red!50}No \\ \cline{2-4}
+    & Windows 10, Windows Server (2016+) & Edge 18 & \cellcolor{red!50}No \\ \hline
+    Apple Safari & iOS 12, macOS 10.14 & 12 & \cellcolor{yellow!50}Disabled \\ \hline
+    Opera Browser & Windows (7+), Linux, Android (4.0+), macOS (10.9+) & 56 & \cellcolor{yellow!50}Disabled \\ \hline
+    Tor Browser & Windows (7+), Linux, macOS (10.9+) & IE 11 & \cellcolor{green!50}Yes \\ \hline
+    \end{tabularx}
+
+    \note{
+      Chrome uses BoringSSL (Google's fork of OpenSSL) \\
+      Firefox uses Mozilla's Network Security Services (NSS) \\
+      Edge uses Microsoft's EdgeHTML on Windows, Apple/KDE's Webkit on iOS, and Chromium's Blink on Android \\
+      Opera uses Apple/KDE's Webkit and Chromium's Blink \\
+      Apple Safari apparently allows the use of TLS 1.3, but it is disabled and must be activated with \texttt{defaults write /Library/Preferences/com.apple.networkd tcp_connect_enable_tls13 1}\\
+      Tor uses Firefox ESR 60.2 under the hood, which currently only implements the draft-22 version, but they are thinking about backporting NSS changes
+    }
+\end{frame}
+
+\begin{frame}{Which libraries support TLS 1.3?}
+  \begin{tabularx}{\textwidth}{
+    |>{\hsize=0.4\hsize} Y |
+    >{\hsize=0.2\hsize} Y |
+    >{\hsize=0.3\hsize} Y |
+    >{\hsize=0.1\hsize} Y |
+  }
+  \hline
+  \textbf{Library} & \textbf{Language} & \textbf{Versions} & \textbf{TLS 1.3}\\ \hline
+  BoringSSL & C++ & \texttt{master} & \cellcolor{green!50}Yes \\ \hline
+  fizz & C++ & v2018.11.12.00 & \cellcolor{green!50}Yes \\ \hline
+  GnuTLS & C & 3.6.3 & \cellcolor{green!50}Yes \\ \hline
+  Java Secure Socket Extension & Java & JDK11 & \cellcolor{green!50}Yes \\ \hline
+  miTLS & F* & - & \cellcolor{green!50}Yes \\ \hline
+  NSS & C / Assembler & 3.39 & \cellcolor{green!50}Yes \\ \hline
+  OpenSSL & C & 1.1.1 & \cellcolor{green!50}Yes \\ \hline
+  rustls & Rust & 0.14.0 & \cellcolor{green!50}Yes \\ \hline
+  SChannel (Windows API) & C++ & Windows 10 v1607 & \cellcolor{red!50}No \\ \hline
+  Secure Transport & C / Swift & macOS 10.13, iOS 11 & \cellcolor{yellow!50}Yes \\ \hline
+  wolfSSL & C & 3.15 & \cellcolor{green!50}Yes \\ \hline
+  \end{tabularx}
+
+  \note{
+    cryptlib is a library from Peter Gutmann, a Professor in Auckland \\
+    JSSE (Java) will need JDK11, but but other library like Bouncy Castle is good too. \\
+  }
+\end{frame}
+
 \section{Changes to the current protocol}
 
 \subsection{1-RTT Handshake instead 2-RTT}
@@ -41,7 +118,7 @@
 How does the TLS 1.2 Handshake work currently?
 \end{frame}
 
-\begin{frame}{}[standout]
+\begin{frame}[standout]
   TLS v1.2 Handshake - Wiresharkdemo
 \end{frame}
 
@@ -50,7 +127,7 @@ How does the TLS 1.2 Handshake work currently?
   Where exactly are the changes?
 \end{frame}
 
-\begin{frame}{}[standout]
+\begin{frame}[standout]
   TLS v1.3 Handshake - Wiresharkdemo
 \end{frame}
 
@@ -58,7 +135,7 @@ How does the TLS 1.2 Handshake work currently?
 
 \subsection{0-RTT Resumption}
 
-\begin{frame}{}
+\begin{frame}
 
 \end{frame}
 
@@ -72,36 +149,44 @@ How does the TLS 1.2 Handshake work currently?
 
 \subsection{Why do features need to be removed?}
 
-\begin{frame}{}
+\begin{frame}
 
 \end{frame}
 
 \subsection{Removed Cipher Suites, Hashing Functions...}
 
-\begin{frame}{}
+\begin{frame}
 
 \end{frame}
 
 \subsection{Compression}
 
-\begin{frame}{}
+\begin{frame}
 
 \end{frame}
 
 \subsection{Renegotiation}
 
-\begin{frame}{}
+\begin{frame}
 
 \end{frame}
 
 \section{Conclusion}
 
-\begin{frame}{}
+\begin{frame}
 
 \end{frame}
 
 \begin{frame}[standout]
   Questions?
+\end{frame}
+
+\appendix
+
+\section{Literatur}
+
+\begin{frame}[allowframebreaks]{Literatur}
+  %\printbibliography
 \end{frame}
 
 \end{document}

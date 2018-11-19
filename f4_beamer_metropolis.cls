@@ -12,7 +12,6 @@
 \RequirePackage{FiraSans}
 \RequirePackage{xspace}
 \RequirePackage{booktabs}
-\RequirePackage[scale=2]{ccicons}
 \RequirePackage{pgfplots}
 \RequirePackage{pgfpages}
 
@@ -41,17 +40,13 @@
 \RequirePackage{pdfpages}
 \RequirePackage{float}
 
-\RequirePackage{xcolor}
-
-\RequirePackage{hyperref}
-\hypersetup{
-    colorlinks,
-    linkcolor={hsh-f4-orange},
-    citecolor={hsh-f4-orange},
-    urlcolor={blue!80!black}
-}
+\RequirePackage{xcolor,colortbl}
 
 \RequirePackage{xr-hyper}
+
+\RequirePackage{multirow}
+\RequirePackage{makecell}
+\RequirePackage{array, booktabs}
 
 \RequirePackage[autostyle=true,german=quotes,thresholdtype=words,threshold=20]{csquotes}
 
@@ -70,11 +65,21 @@
 \ProcessOptions
 
 % Load the default beamer class and initialize page size and other options
-\LoadClass[german,compress,hyperref={pdfpagelabels=false},unknownkeysallowed,10pt]{beamer}
+\LoadClass[german,compress,unknownkeysallowed,10pt]{beamer}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={hsh-f4-orange},
+    citecolor={hsh-f4-orange},
+    urlcolor={blue!80!black}
+}
+
 % Must be defined here, else the pages go crazy
 \RequirePackage{geometry}
 % Define page size
 \geometry{paperwidth=16cm,paperheight=9cm}
+
+\RequirePackage{contour}
 
 % allow notes to be present
 % \setbeameroption{show notes on second screen=right}
@@ -89,8 +94,7 @@
 \mode<presentation>{%
 \hypersetup{pdffitwindow=true,pdfpagelayout=SinglePage,%pdfpagemode=FullScreen,
 breaklinks=true,urlcolor=Blue}
-\usetheme[subsectionpage=progressbar,
-          titleformat=allcaps]{metropolis}
+\usetheme[subsectionpage=progressbar]{metropolis}
 \setbeamercovered{invisible}
 \setbeamertemplate{theorems}[numbered]
 \setbeamertemplate{captions}[numbered]
@@ -129,6 +133,37 @@ breaklinks=true,urlcolor=Blue}
 }
 
 \setbeamercolor{frametitle}{bg=hsh-f4-orange}
+
+\let\frametitleformat\MakeUppercase
+
+\newcommand{\frametitlestart}{
+  \rule{0pt}{1.3ex +%
+    \totalheightof{%
+      \ifcsdef{frametitleformat}{\frametitleformat X}{X}%
+    }%
+  }%
+}
+
+\newcommand{\frametitleend}{
+  \rule[-1.3ex]{0pt}{1.1}
+}
+
+\contourlength{0.075em}
+
+\setbeamertemplate{frametitle}{
+  \nointerlineskip%
+  \begin{beamercolorbox}[%
+    wd=\paperwidth,%
+    sep=0pt,%
+    leftskip=1.3ex,%
+    rightskip=1.3ex,%
+  ]{frametitle}%
+    \frametitlestart
+    \contour*{black}{\insertframetitle}
+    \nolinebreak%
+    \frametitleend
+  \end{beamercolorbox}%
+}
 
 % Increase the size of the progressbar
 \setbeamertemplate{progress bar in section page}{
@@ -239,7 +274,7 @@ breaklinks=true,urlcolor=Blue}
   \mbox{~}{\bfseries Hochschule Hannover}, Fak. IV
   \hfill
   \insertshorttitle{}
-  \hfill slide \insertframenumber{}
+  \hfill slide \insertframenumber{} of \inserttotalframenumber
 	\vspace*{4pt}
 	}}
 %    \parbox{4cm}{%
