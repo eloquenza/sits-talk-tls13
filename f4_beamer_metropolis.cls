@@ -22,7 +22,7 @@
 %Math. Symbole aus AmsTeX
 \RequirePackage{graphicx,amssymb,url,atbegshi,etoolbox}
 
-\RequirePackage[backend=biber,natbib=true, style=numeric, citestyle=numeric, maxnames=7, minnames=1, maxcitenames=2, url=true]{biblatex}
+\RequirePackage[backend=biber,natbib=true, style=numeric, citestyle=reading, maxnames=7, minnames=1, maxcitenames=2, url=true]{biblatex}
 % Umlaute und über Tastatur einzugeben
 \RequirePackage[utf8]{inputenc}
 % add table of contents and other tables automatically
@@ -105,7 +105,6 @@ breaklinks=true,urlcolor=Blue}
 \setbeamertemplate{section in toc shaded}[default][50]
 \setbeamertemplate{subsection in toc shaded}[default][30]
 %\setbeamertemplate{itemize items}[ball]
-\setbeamertemplate{bibliography item}[book]
 % disable the continuation counting
 \setbeamertemplate{frametitle continuation}{}
 % allow the page frame to be bigger by setting smaller margins
@@ -304,4 +303,25 @@ breaklinks=true,urlcolor=Blue}
 	~}
 
 \setbeamercolor{structure}{fg=hsh-f4-orange}
+
+\setbeamertemplate{bibliography item}{%
+  \ifboolexpr{ test {\ifentrytype{book}} or test {\ifentrytype{mvbook}}
+    or test {\ifentrytype{collection}} or test {\ifentrytype{mvcollection}}
+    or test {\ifentrytype{reference}} or test {\ifentrytype{mvreference}} }
+    {\setbeamertemplate{bibliography item}[book]}
+    {\ifentrytype{online}
+       {\setbeamertemplate{bibliography item}[online]}
+       {\setbeamertemplate{bibliography item}[article]}}%
+  \usebeamertemplate{bibliography item}}
+
+\defbibenvironment{bibliography}
+  {\list{}
+     {\settowidth{\labelwidth}{\usebeamertemplate{bibliography item}}%
+      \setlength{\leftmargin}{\labelwidth}%
+      \setlength{\labelsep}{\biblabelsep}%
+      \addtolength{\leftmargin}{\labelsep}%
+      \setlength{\itemsep}{\bibitemsep}%
+      \setlength{\parsep}{\bibparsep}}}
+  {\endlist}
+  {\item}
 }
