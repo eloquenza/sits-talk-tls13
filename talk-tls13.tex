@@ -37,7 +37,7 @@
   \begin{itemize}
     \item HTTP Public Key Pinning (HPKP) / Certificate Transparency (CT)
     \item Hash Key Derivation Function (HKDF)
-    \item Curve25519
+    \item Curve25519 sowie 448
     \item Edwards-curve Digital Signature Algorithm (EdDSA)
   \end{itemize}
 
@@ -180,8 +180,26 @@ Too many to list them all
 
 \subsection{0-RTT Resumption}
 
-\begin{frame}
+\begin{frame}{0-RTT Handshake}
+  \begin{figure}[!h]
+    \centering
+    \vspace*{-0.25cm}
+    \includegraphics[width=\linewidth]{./images/tls13-handshake-zero-rtt.png}
+    %\caption{TLS 1.3 Handshake mit ECDHE}
+    \label{fig:tls13-handshake-zero-rtt}
+  \end{figure}
+\end{frame}
 
+\subsection{Session Resumption}
+
+\begin{frame}{Session Resumption basierend auf einem \enquote{pre-shared key}-Modus}
+  \begin{figure}[!h]
+    \centering
+    \vspace*{-0.25cm}
+    \includegraphics[width=\linewidth]{./images/tls13-handshake-resumption.png}
+    %\caption{TLS 1.3 Handshake mit ECDHE}
+    \label{fig:tls13-handshake-resumption}
+  \end{figure}
 \end{frame}
 
 \subsection{Protection from downgrading}
@@ -190,30 +208,60 @@ Too many to list them all
 
 \end{frame}
 
+\section{Features, die vereinfacht wurden}
+
+\begin{frame}{}
+Festgesetzte DHE Gruppen (wegen LogJam-Angriff)
+\end{frame}
+
 \section{Features removed from TLS 1.3}
 
 \subsection{Why do features need to be removed?}
 
 \begin{frame}
-
+  \begin{enumerate}[<+->]
+    \item Cipher Suites werden unsicher durch neu-erfundene Attacken
+    \item Features stellen sich als unsicher heraus
+    \end{enumerate}
 \end{frame}
 
-\subsection{Removed Cipher Suites, Hashing Functions...}
+\subsection{Entfernte Cipher Suites und Hashing Funktionen}
 
 \begin{frame}
-
+RC4, SHA1, MD5
 \end{frame}
 
 \subsection{Compression}
 
 \begin{frame}
-
+Wegen CRIME Angriff
 \end{frame}
 
 \subsection{Renegotiation}
 
 \begin{frame}
 
+\end{frame}
+
+\subsection{Static RSA Handshake}
+
+\begin{frame}
+Hierfuer gibts num standardmaessig ECDHE
+Static RSA hat keine Forward Perfect Secrecy gegeben
+\end{frame}
+
+\subsection{CBC und MAC-then-Encrypt mode}
+
+\begin{frame}
+Dafuer gibts nun AEAD
+Dadurch werden Attacken Vaudenay, Lucky 13 und POODLE vermieden
+\end{frame}
+
+\subsection{RSA PKCS#1v1.5}
+
+\begin{frame}
+  RSASSA-PSS als Ersatz
+  https://en.wikipedia.org/wiki/Probabilistic_signature_scheme
 \end{frame}
 
 \section{Conclusion}
@@ -230,6 +278,12 @@ Too many to list them all
 
 \begin{frame}[allowframebreaks]{Literature}
   \printbibliography
+\end{frame}
+
+\appendix
+
+\begin{frame}{Formale Verifikation}
+
 \end{frame}
 
 \end{document}
