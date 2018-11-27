@@ -37,7 +37,16 @@
   \begin{itemize}
     \item HTTP Public Key Pinning (HPKP) / Certificate Transparency (CT)
     \item Hash Key Derivation Function (HKDF)
+    \item Curve25519
+    \item Edwards-curve Digital Signature Algorithm (EdDSA)
   \end{itemize}
+
+  \note{
+    Disclaimer: Curve22519 is not a new technology.
+    It was released in 2005.
+    But after discovery that NSA implemented a backdoor into Dual\_EC\_DRBG, interest increased.
+    Since 2017 NIST added them to Special Publication 800-186, allowing the use by US Federal Government.
+  }
   \end{frame}
 
 \begin{frame}{What new attacks were discovered?}
@@ -127,7 +136,7 @@ Too many to list them all
 
   \note{
     cryptlib is a library from Peter Gutmann, a Professor in Auckland \\
-    JSSE (Java) will need JDK11, but but other library like Bouncy Castle is good too. \\
+    JSSE (Java) will need JDK11, but other library like Bouncy Castle is good too. \\
   }
 \end{frame}
 
@@ -136,7 +145,17 @@ Too many to list them all
 \subsection{1-RTT Handshake instead 2-RTT}
 
 \begin{frame}{TLS v1.2 Handshake}
-How does the TLS 1.2 Handshake work currently?
+  \begin{figure}[!h]
+    \centering
+    \includegraphics[scale=0.375,keepaspectratio]{./images/tls12-handshake-ecdhe.png}
+    %\caption{TLS 1.2 Handshake mit ECDHE}
+    \label{fig:tls12-handshake-ecdhe}
+  \end{figure}
+
+  \note{
+    ECDHE daher, weil static RSA ab TLS 1.3 nicht mehr unterstuetzt ist.
+    Bei static RSA wuerde ServerKeyExchange nicht durchgefuehrt werden.
+  }
 \end{frame}
 
 \begin{frame}[standout]
@@ -144,8 +163,13 @@ How does the TLS 1.2 Handshake work currently?
 \end{frame}
 
 \begin{frame}{TLS v1.3 Handshake}
-  How does the TLS 1.3 Handshake work?
-  Where exactly are the changes?
+  \begin{figure}[!h]
+    \centering
+    \vspace*{-0.25cm}
+    \includegraphics[width=\linewidth]{./images/tls13-handshake-ecdhe.png}
+    %\caption{TLS 1.3 Handshake mit ECDHE}
+    \label{fig:tls13-handshake-ecdhe}
+  \end{figure}
 \end{frame}
 
 \begin{frame}[standout]

@@ -115,6 +115,7 @@ breaklinks=true,urlcolor=Blue}
 
 % Define the HsH F4 color
 \definecolor{hsh-f4-orange}{rgb}{0.862745098, 0.235294118, 0.019607843}
+\setbeamercolor{background canvas}{bg=white}
 
 % define font sizes and colors
 \setbeamerfont{title}{size=\huge, series=\bfseries}
@@ -147,7 +148,7 @@ breaklinks=true,urlcolor=Blue}
   \rule[-1.3ex]{0pt}{1.1}
 }
 
-\contourlength{0.075em}
+\contourlength{0.05em}
 
 \setbeamertemplate{frametitle}{
   \nointerlineskip%
@@ -164,14 +165,14 @@ breaklinks=true,urlcolor=Blue}
   \end{beamercolorbox}%
 }
 
+\newlength{\hshHelferPage}
 % Increase the size of the progressbar
 \setbeamertemplate{progress bar in section page}{
-  \newlength{\hshHelferPage}
   \setlength{\hshHelferPage}{%
     \textwidth * \ratio{\insertframenumber pt}{\inserttotalframenumber pt}%
   }%
   \tikzexternaldisable%
-  \begin{tikzpicture}
+  \begin{tikzpicture}%
     \fill[bg] (0,0) rectangle (\textwidth, 0.1);
     \fill[fg] (0,0) rectangle (\hshHelferPage, 0.1);
   \end{tikzpicture}%
@@ -193,7 +194,7 @@ breaklinks=true,urlcolor=Blue}
 
 \AtBeginDocument{%
   \begin{frame}[plain, noframenumbering]
-    \begin{columns}[C]
+    \begin{columns}
         \begin{column}{0.85\linewidth}
             \maketitle
         \end{column}
