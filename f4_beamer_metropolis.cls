@@ -47,6 +47,7 @@
 \RequirePackage{multirow}
 \RequirePackage{makecell}
 \RequirePackage{array, booktabs}
+\RequirePackage{tikz}
 
 \RequirePackage[autostyle=true,german=quotes,thresholdtype=words,threshold=20]{csquotes}
 
@@ -127,11 +128,6 @@ breaklinks=true,urlcolor=Blue}
   fg=hsh-f4-orange
 }
 
-\setbeamercolor{progress bar in section page}{
-  fg=alerted text.fg,
-  bg=alerted text.fg!50!black!30
-}
-
 \setbeamercolor{frametitle}{bg=hsh-f4-orange}
 
 \let\frametitleformat\MakeUppercase
@@ -145,7 +141,7 @@ breaklinks=true,urlcolor=Blue}
 }
 
 \newcommand{\frametitleend}{
-  \rule[-1.3ex]{0pt}{1.1}
+  \rule[-1.3ex]{0pt}{1.1pt}
 }
 
 \contourlength{0.05em}
@@ -177,6 +173,11 @@ breaklinks=true,urlcolor=Blue}
     \fill[fg] (0,0) rectangle (\hshHelferPage, 0.1);
   \end{tikzpicture}%
   \tikzexternalenable%
+}
+
+\setbeamercolor{progress bar in section page}{
+  fg=alerted text.fg,
+  bg=alerted text.fg!50!black!30
 }
 
 % Define the layout of the title page - almost default metropolis
@@ -268,7 +269,7 @@ breaklinks=true,urlcolor=Blue}
   \setbeamertemplate{footline}{%
 
   \hspace{0.325cm}%
-	\parbox{0.95\textwidth}{{\fontsize{6}{8}
+	\parbox{0.95\textwidth}{{\fontsize{6pt}{8pt}
   \mbox{~}\textcolor{hsh-f4-orange}{\vhrulefill{2pt}\vspace*{0.125cm}}\mbox{}\\
   \vspace*{0.125cm}
   \mbox{~}{\bfseries Hochschule Hannover}, Fak. IV

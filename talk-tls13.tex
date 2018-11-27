@@ -16,24 +16,43 @@
 \begin{document}
 
 % Cannot be moved into the class
-\begin{frame}{Table of contents}
+\begin{frame}{Inhaltsverzeichnis}
     \tableofcontents[hideallsubsections]
   \end{frame}
 
-\section{Introduction}
+\section{Einfuehrung}
+
+\begin{frame}{Was ist Transport Layer Security (TLS)?}
+  \begin{itemize}
+    \item Hybrides Verschlüsselungsprotokoll zur sicheren Datenübertragung im Internet
+    \item Verbesserung des alten \enquote{Secure Sockets Layer (SSL)}-Protokolls
+    \item Basiert auf TCP
+    \item Liegt zwischen Transport Layer und Application Layer im TCP/IP-Stack
+    \item \textbf{Nicht} nur fuer HTTP(S): POP3\textbf{S}, SMTP\textbf{S}, IMAP\textbf{S}, XMPP\textbf{S}, IRC\textbf{S}, FTP\textbf{S}, OpenVPN...
+    \item TLS 1.0 im Januar 1999 als Upgrade zu SSL 3.0 entwickelt wurden
+  \end{itemize}
+
+  \note{
+    Von der Basis auf TCP kommt der Name Transport Layer Security.
+  }
+\end{frame}
 
 \subsection{Motivation}
 
 \begin{frame}{TLS 1.2}
+Release: \textbf{vor 10 Jahren} \\
+Letzte Aenderungen dazu durch:
 \begin{itemize}
-  \item TLS 1.2 was released \textbf{10 years ago}
-  \item Last change to specification in RFC6176, released in \textbf{\citeyear{RFC6176}}: \newline
-  \textit{\citetitle{RFC6176}}
-
+    \item RFC6176, veroeffentlicht in \textbf{\citeyear{RFC6176}}: \newline
+    \textit{\citetitle{RFC6176}}
+    \item RFC7627, veroeffentlicht in \textbf{\citeyear{RFC7627}}: \newline
+    \textit{\citetitle{RFC7627}}
+    \item RFC7685, veroeffentlicht in \textbf{\citeyear{RFC7685}}: \newline
+    \textit{\citetitle{RFC7685}}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{What new, relevant technologies were invented?}
+\begin{frame}{Welche neuen, relevanten Technologien wurden entwickelt?}
   \begin{itemize}
     \item HTTP Public Key Pinning (HPKP) / Certificate Transparency (CT)
     \item Hash Key Derivation Function (HKDF)
@@ -49,21 +68,21 @@
   }
   \end{frame}
 
-\begin{frame}{What new attacks were discovered?}
-Too many to list them all
+\begin{frame}{Welche Angriffe wurden seit TLS1.2 Release gefunden?}
   \begin{itemize}
-    \item Renegotiation attacks
-    \item Downgrading attacks: FREAK \& Logjam,
-    \item Cross-protocol attacks: DROWN,
-    \item Chosen-plaintext attacks: BEAST,
-    \item Compression based attacks: CRIME \& BREACH,
-    \item Padding oracle attacks: POODLE, Serge Vaudenay's attack,
-    \item Timing attacks: Lucky Thirteen,
-    \item Attacks on specific ciphers: Sweet32, RC4,
-    \item Truncation attacks,
-    \item Resumption based attacks,
-    \item Implementation errors: Heartbleed, BERserk, Cloudflare,
-    \item Attacks which are enabled by TLS: Unholy PAC
+    \item Implementationsfehler: Heartbleed, BERserk, Cloudflare
+    \item \enquote{Downgrading}-Angriffe: FREAK \& Logjam
+    \item \enquote{Cross-protocol}-Angriffe: DROWN, Unholy PAC
+    \item \enquote{Chosen-plaintext}-Angriffe: BEAST
+    \item Kompressions-basierte Angriffe: CRIME, TIME, \& BREACH
+    \item \enquote{Padding oracle}-Angriffe: POODLE, Serge Vaudenay's Angriff, Bleichenbacher's Oracle Angriff (ROBOT)
+    \item Timing-Angriffe: Lucky Thirteen
+    \item Side-Channel-Angriffe: HEIST
+    \item Angriffe auf spezifische Chiffre: Sweet32, SMACK, ROCA
+    \item Angriffe auf spezifische Hashing-Funktionen: SLOTH, RC4
+    \item \enquote{Renegotiation}-Angriffe: 3SHAKE
+    \item \enquote{Truncation}-Angriffe
+    \item Resumption-basierte Angriffe
   \end{itemize}
 
   \note{
@@ -71,12 +90,31 @@ Too many to list them all
   }
 \end{frame}
 
+\section{TLS 1.3}
+
+\begin{frame}{TLS1.3}
+  \begin{itemize}
+    \item Release in August \citeyear{RFC8446}
+    \item Spezifikation in RFC8446: \textit{\citetitle{RFC8446}}
+    \item Seit April 2014 in Entwicklung
+    \item Unter anderem daran beteiligt:
+    \begin{itemize}
+      \item Google, Cloudflare, Akamai, Vodafone, Mozilla, Apple, Microsoft, Amazon, Facebook, Red Hat, IBM, ANSSI, Sun Microsystems, Nokia, Symantec, OpenSSL, Cisco...
+    \end{itemize}
+    \item Aufgrund signifikanter Aenderungen beinahe TLS 2.0 genannt\footnote{\url{https://www.ietf.org/mail-archive/web/tls/current/msg20938.html}}
+  \end{itemize}
+
+  \note{
+    ANSSI = franzoesischer Geheimdienst
+  }
+\end{frame}
+
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 \newcolumntype{S}{>{\centering\small}X}
 
-\subsection{Browser and library support}
+\subsection{Browser- und Bibliotheksunterstuetzung}
 
-\begin{frame}{Which browsers support TLS 1.3?}
+\begin{frame}{Welche Browser unterstuetzen TLS 1.3?}
   \begin{tabularx}{\textwidth}{
       |>{\hsize=0.2\hsize} Y |
       >{\hsize=0.5\hsize} S |
@@ -112,7 +150,7 @@ Too many to list them all
     }
 \end{frame}
 
-\begin{frame}{Which libraries support TLS 1.3?}
+\begin{frame}{Welche Bibliotheken unterstuetzen TLS 1.3?}
   \begin{tabularx}{\textwidth}{
     |>{\hsize=0.4\hsize} Y |
     >{\hsize=0.2\hsize} Y |
@@ -140,9 +178,9 @@ Too many to list them all
   }
 \end{frame}
 
-\section{Changes to the current protocol}
+\section{Aenderungen am bisherigen Protokoll}
 
-\subsection{1-RTT Handshake instead 2-RTT}
+\subsection{Handshake in einer Round-Trip-Time (RTT) statt zwei}
 
 \begin{frame}{TLS v1.2 Handshake}
   \begin{figure}[!h]
@@ -155,6 +193,7 @@ Too many to list them all
   \note{
     ECDHE daher, weil static RSA ab TLS 1.3 nicht mehr unterstuetzt ist.
     Bei static RSA wuerde ServerKeyExchange nicht durchgefuehrt werden.
+    Base Key zum Verschluesseln ab EncryptedExtensions hier ist das \texttt{server_handshake_traffic_secret}
   }
 \end{frame}
 
@@ -176,9 +215,15 @@ Too many to list them all
   TLS v1.3 Handshake - Wiresharkdemo
 \end{frame}
 
-\section{New Features coming to TLS 1.3}
+\subsection{Schutz vor \enquote{downgrading}}
 
-\subsection{0-RTT Resumption}
+\begin{frame}{Was ist \enquote{downgrading}?}
+
+\end{frame}
+
+\section{Neue Funktionalitaet von TLS 1.3}
+
+\subsection{Zero-RTT Resumption}
 
 \begin{frame}{0-RTT Handshake}
   \begin{figure}[!h]
@@ -195,28 +240,21 @@ Too many to list them all
 \begin{frame}{Session Resumption basierend auf einem \enquote{pre-shared key}-Modus}
   \begin{figure}[!h]
     \centering
-    \vspace*{-0.25cm}
     \includegraphics[width=\linewidth]{./images/tls13-handshake-resumption.png}
     %\caption{TLS 1.3 Handshake mit ECDHE}
     \label{fig:tls13-handshake-resumption}
   \end{figure}
 \end{frame}
 
-\subsection{Protection from downgrading}
-
-\begin{frame}{What is downgrading?}
-
-\end{frame}
-
-\section{Features, die vereinfacht wurden}
+\section{Funktionalitaet, die vereinfacht wurden}
 
 \begin{frame}{}
 Festgesetzte DHE Gruppen (wegen LogJam-Angriff)
 \end{frame}
 
-\section{Features removed from TLS 1.3}
+\section{Entfernte Funktionalitaet}
 
-\subsection{Why do features need to be removed?}
+\subsection{Warum sollte man Funktionalitaet entfernen?}
 
 \begin{frame}
   \begin{enumerate}[<+->]
@@ -257,26 +295,26 @@ Dafuer gibts nun AEAD
 Dadurch werden Attacken Vaudenay, Lucky 13 und POODLE vermieden
 \end{frame}
 
-\subsection{RSA PKCS#1v1.5}
+\subsection{RSA PKCS\#1v1.5}
 
 \begin{frame}
   RSASSA-PSS als Ersatz
   https://en.wikipedia.org/wiki/Probabilistic_signature_scheme
 \end{frame}
 
-\section{Conclusion}
+\section{Konklusion}
 
 \begin{frame}
 
 \end{frame}
 
 \begin{frame}[standout]
-  Questions?
+  Offene Fragen?
 \end{frame}
 
-\section{Literature}
+\section{Literatur}
 
-\begin{frame}[allowframebreaks]{Literature}
+\begin{frame}[allowframebreaks]{Literatur}
   \printbibliography
 \end{frame}
 
