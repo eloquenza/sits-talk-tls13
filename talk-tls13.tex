@@ -125,21 +125,6 @@ Letzte Aenderungen dazu durch:
   }
 \end{frame}
 
-\begin{frame}{Auflistung der Aenderungen}
-  \begin{itemize}
-  \item ChangeCipherSpec wurde entfernt, somit bleibt ueber: \\
-    \begin{tikzpicture}
-      \draw (0,0) rectangle (\textwidth, 1) node[pos=.5] {Record};
-      \draw (0, 1) rectangle (\textwidth / 2,2) node[pos=.5] {Handshake};
-      \draw (\textwidth / 2 , 1) rectangle (\textwidth / 2 + \textwidth / 2, 2) node[pos=.5] {Alert};
-    \end{tikzpicture}
-  \item Hinzugefuegt: Stromchiffre ChaCha20 mit MAC Poly1305
-  \item Hinzugefuegt: Digitale Signature Algorithmen Ed25519 und Ed448
-  \item Hinzugefuegt: Schluesselaustauschprotokolle Curve25519 und Curve448
-  \item
-\end{itemize}
-\end{frame}
-
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 \newcolumntype{S}{>{\centering\small}X}
 
@@ -209,9 +194,34 @@ Letzte Aenderungen dazu durch:
   }
 \end{frame}
 
-\section{Aenderungen am Handshake-Protokoll}
+\subsection{Allgemeine Aenderungen}
 
-\subsection{Handshake in einer Round-Trip-Time (RTT) statt zwei}
+\begin{frame}{Allgemeine Aenderungen}
+  \begin{itemize}
+    \item ChangeCipherSpec wurde entfernt, somit bleibt ueber: \\
+    \begin{tikzpicture}
+      \draw (0,0) rectangle (\textwidth, 1) node[pos=.5] {Record};
+      \draw (0, 1) rectangle (\textwidth / 2,2) node[pos=.5] {Handshake};
+      \draw (\textwidth / 2 , 1) rectangle (\textwidth / 2 + \textwidth / 2, 2) node[pos=.5] {Alert};
+    \end{tikzpicture}
+    \item Renegotiation zu SSL untersagt
+    \item Nutzer-definierte Diffie-Hellmann Gruppen nicht mehr unterstuetzt
+    \item Nur noch Schluesselaustauschprotokolle, die Perfect Forward Secrecy garantieren:
+    \begin{itemize}
+      \item DHE-RSA,
+      \item ECDHE-RSA,
+      \item ECDHE-ECDSA
+    \end{itemize}
+  \end{itemize}
+
+  \note{
+    Entfernen der Custom DHE Groups macht es erst moeglich, dass ein ganzer Round Time Trip vom Handshake entfernt werden kann, da der Client einfach welche zu Beginn des Verbindungsaufbaus auswaehlt und daher nicht erst mit dem Server aushandeln muss, welche benutzt werden muessen
+    Erlaubt sind also nur noch die Schluesselaustauschprotokolle, die auf ephemeral Diffie-Hellmann (ueber finite Felder oder elliptic-curve) oder auf einem pre-shared Key aufbauen.
+    Das bedeutet, dass statisches RSA oder DSA gar nicht mehr erlaubt ist.
+  }
+\end{frame}
+
+\subsection{Aenderungen am Handshake-Protokoll}
 
 \begin{frame}{TLS v1.2 Handshake}
   \begin{figure}[!h]
@@ -240,23 +250,19 @@ Letzte Aenderungen dazu durch:
     \includegraphics[width=\linewidth]{./images/tls13-handshake-ecdhe.png}
     %\caption{TLS 1.3 Handshake mit ECDHE}
     \label{fig:tls13-handshake-ecdhe}
-    \autocite{taubert}
+    \footnote{\autocite{taubert}}
   \end{figure}
+
+  \note{
+    Moeglich, da RSA und Custom DH Groups entfernt wurden.
+    Durch festgesetzte finite Gruppen fuer den Diffie-Hellmann Austausch ist es einfach zu entscheiden, welche Parameter wohl vom Server unterstuetzt werden (entweder ECDHE mit x25519, P-256).
+    Dadurch kann Client KeyShares direkt mitschicken, es verfaellt das Beduerfnis darueber zu verhandeln und wir sparen uns einen RoundTrip
+  }
 \end{frame}
 
 \begin{frame}[standout]
   TLS v1.3 Handshake - Wiresharkdemo
 \end{frame}
-
-\subsection{Schutz vor \enquote{downgrading}}
-
-\begin{frame}{Was ist \enquote{downgrading}?}
-
-\end{frame}
-
-\section{Neue Funktionalitaet von TLS 1.3}
-
-\subsection{Zero-RTT Resumption}
 
 \begin{frame}{0-RTT Handshake}
   \begin{figure}[!h]
@@ -267,80 +273,126 @@ Letzte Aenderungen dazu durch:
     \label{fig:tls13-handshake-zero-rtt}
     \autocite{taubert}
   \end{figure}
+  \note{
+    0-RTT sind anfaellig gegenueber Replayattacken
+    Muessen daher idempotent sein, wird geraten nur bei GET zu erlauben
+    Anwesenden fragen, ob sie eventuell Problem mit dem 0-RTT Handshake sehen
+  }
 \end{frame}
 
-\subsection{Session Resumption}
+% \subsection{Session Resumption}
 
-\begin{frame}{Session Resumption basierend auf einem \enquote{pre-shared key}-Modus}
+% \begin{frame}{Session Resumption basierend auf einem \enquote{pre-shared key}-Modus}
+%   \begin{figure}[!h]
+%     \centering
+%     \includegraphics[width=\linewidth]{./images/tls13-handshake-resumption.png}
+%     %\caption{TLS 1.3 Handshake mit ECDHE}
+%     \label{fig:tls13-handshake-resumption}
+%     \autocite{taubert}
+%   \end{figure}
+% \end{frame}
+
+\begin{frame}{Was ist \enquote{downgrading}?}
+
+\end{frame}
+
+\begin{frame}{LogJam Angriff: Ablauf}
   \begin{figure}[!h]
     \centering
-    \includegraphics[width=\linewidth]{./images/tls13-handshake-resumption.png}
+    \vspace*{-0.35cm}
+    \includegraphics[scale=0.8]{./images/logjam.png}
     %\caption{TLS 1.3 Handshake mit ECDHE}
-    \label{fig:tls13-handshake-resumption}
-    \autocite{taubert}
+    \label{fig:logjam}
+    \autocite{logjam}
   \end{figure}
 \end{frame}
 
-\section{Entfernte Funktionalitaet}
-
-\subsection{Warum sollte man Funktionalitaet entfernen?}
-
-\begin{frame}
-  \begin{enumerate}[<+->]
-    \item Cipher Suites werden unsicher durch neu-erfundene Attacken
-    \item Features stellen sich als unsicher heraus
-    \end{enumerate}
-\end{frame}
-
-\subsection{Entfernte Cipher Suites und Hashing Funktionen}
-
-\begin{frame}
-RC4, SHA1, MD5
-\end{frame}
-
-\subsection{Compression}
-
-\begin{frame}
-Wegen CRIME Angriff
-\end{frame}
-
-\subsection{Renegotiation}
-
-\begin{frame}
+\begin{frame}{LogJam Angriff: Wahrscheinlichkeit}
 
 \end{frame}
 
-\subsection{Static RSA Handshake}
+\begin{frame}{Downgrading Praeventions Mechanismus in TLS 1.3}
 
-\begin{frame}
-Hierfuer gibts num standardmaessig ECDHE
-Static RSA hat keine Forward Perfect Secrecy gegeben
 \end{frame}
 
-\subsection{CBC und MAC-then-Encrypt mode}
+\subsection{Entfernte Funktionalitaet}
 
-\begin{frame}
-Dafuer gibts nun AEAD
-Dadurch werden Attacken Vaudenay, Lucky 13 und POODLE vermieden
+\begin{frame}{Warum sollte man Funktionalitaet entfernen?}
+  \begin{overlayarea}{\textwidth}{.5\textheight}
+  \begin{itemize}
+    \item<2-> Neu-gefundene Attacken schwaechen vorhandene Funktionalitaet
+    \item<3-> Funktionalitaet sicherheitstechnisch nicht abgesichert
+    \item<4-> Protokoll zu flexibel, richtige Konfiguration muss gewaehlt werden
+    \end{itemize}
+  \end{overlayarea}
+
+    \note{
+      Anwesenden fragen, ob sie gute Ideen haetten, warum man Funktionalitaet entfernt.
+    }
 \end{frame}
 
-\subsection{RSA PKCS\#1v1.5}
+\begin{frame}{Cipher Suite Aenderungen}
+  \begin{itemize}
+  \item HKDF wird als Grundlage aller Schluesselaustauschprotokolle genutzt
+  \item Nur noch Authenticated Encryption with Associated Data (AEAD) basierte Cipher Suites erlaubt
+  \item Stromchiffre ChaCha20 mit MAC Poly1305 hinzugefuegt
+  \item Digitale Signature Algorithmen Ed25519 und Ed448 hinzugefuegt
+  \item Schluesselaustauschprotokolle Curve25519 und Curve448 hinzugefuegt
+  \item RC4, SHA1 und MD5 Support entfernt \autocite{rc4.nomore} \autocite{shattered}
+\end{itemize}
+\note {
+  Cipher Suite = Chiffrensammlung
+  Definiert Schluesselaustauschprotokoll (RSA, ECDHE), Authentifizierungsalgorithmus (RSA, DSA, ECDSA),
+  Verschluesslungalgorithmus (RC4, Triple DES, AES) und Hashfunktion (SHA1, SHA256), MAC-Funktion (HMAC mit SHA1...)
+  TLS_RSA_WITH_3DES_EDE_CBC_SHA
 
-\begin{frame}
+  Als Stromchiffre ist nur eben genannte erlaubt,
+  Als Blockchiffre nur AES GCM / CCM.
+}
+\end{frame}
+
+\begin{frame}{Erlaubte Cipher Suites}
+Nomenklatur: TLS\_AEAD\_HASH
+  \begin{itemize}
+    \item TLS\_AES\_128\_GCM\_SHA256
+    \item TLS\_AES\_256\_GCM\_SHA384
+    \item TLS\_CHACHA20\_POLY1305\_SHA256
+    \item TLS\_AES\_128\_CCM\_SHA256
+    \item TLS\_AES\_128\_CCM\_8\_SHA256
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{CBC und MAC-then-Encrypt mode}
+  Dafuer gibts nun AEAD
+  Dadurch werden Attacken Vaudenay, Lucky 13, LuckyMinus20 und POODLE vermieden
+\end{frame}
+
+\begin{frame}{POODLE Angriff}
+\end{frame}
+
+\begin{frame}{RSA PKCS\#1v1.5}
+  Bleichenbacher Attacke Padding Oracle war hier moeglich
   RSASSA-PSS als Ersatz
   https://en.wikipedia.org/wiki/Probabilistic_signature_scheme
 \end{frame}
 
-\section{Funktionalitaet, die vereinfacht wurden}
+\begin{frame}{Compression}
+Wegen CRIME
+\end{frame}
 
-\begin{frame}{}
-Festgesetzte DHE Gruppen (wegen LogJam-Angriff)
+\begin{frame}{Renegotiation}
+3SHAKE Angriff
 \end{frame}
 
 \section{Fazit}
 
-\begin{frame}
-
+\begin{frame}{Fazit}
+\begin{itemize}
+  \item Konfigurationsaufwand schwindet gering
+  \begin{itemize}
+    \item Schwerer, eine unsichere Konfiguration zu konzipieren
+  \end{itemize}
+\end{itemize}
 \end{frame}
 
 \begin{frame}[standout]
@@ -351,12 +403,6 @@ Festgesetzte DHE Gruppen (wegen LogJam-Angriff)
 
 \begin{frame}[allowframebreaks]{Literatur}
   \printbibliography
-\end{frame}
-
-\appendix
-
-\begin{frame}{Formale Verifikation}
-
 \end{frame}
 
 \end{document}
