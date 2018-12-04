@@ -83,7 +83,7 @@
 \RequirePackage{contour}
 
 % allow notes to be present
-% \setbeameroption{show notes on second screen=right}
+\setbeameroption{show notes on second screen=right}
 
 % Add new command to change size of a hrulefill
 \makeatletter
