@@ -39,11 +39,11 @@
   \end{tikzpicture}
 
   \note{
-    Von der Basis auf TCP kommt der Name Transport Layer Security.
-    Record Protokoll: Arbeitet mit den eigentlichen Daten vom Application Layer, verschlüsselt diese, fragmentiert sie falls nötig und sendet sie zum Transport Layer, zusätzlich ist Kompression möglich.
-    Alert Protokoll: Gibt Status an Gegenüber weiter: Fehler, Connectionabbrüche, etc.
-    Handshake Protokoll: Kümmert sich um die Authentifizierung sowie Schlüsselaustausch und stellt eine Verbindung zwischen Client und Server her.
-    ChangeCipherSpec Protokoll: Kann genutzt werden, um die Verschlüsslung zu wechseln.
+    Von der Basis auf TCP kommt der Name Transport Layer Security. \\
+    Record Protokoll: Arbeitet mit den eigentlichen Daten vom Application Layer, verschlüsselt diese, fragmentiert sie falls nötig und sendet sie zum Transport Layer, zusätzlich ist Kompression möglich. \\
+    Alert Protokoll: Gibt Status an Gegenüber weiter: Fehler, Connectionabbrüche, etc. \\
+    Handshake Protokoll: Kümmert sich um die Authentifizierung sowie Schlüsselaustausch und stellt eine Verbindung zwischen Client und Server her. \\
+    ChangeCipherSpec Protokoll: Kann genutzt werden, um die Verschlüsslung zu wechseln. \\
   }
 \end{frame}
 
@@ -74,9 +74,9 @@ Letzte Änderungen dazu durch:
   \end{itemize}
 
   \note{
-    Disclaimer: Curve22519 is not a new technology.
-    It was released in 2005.
-    But after discovery that NSA implemented a backdoor into Dual\_EC\_DRBG, interest increased.
+    Disclaimer: Curve22519 is not a new technology. \\
+    It was released in 2005.  \\
+    But after discovery that NSA implemented a backdoor into Dual\_EC\_DRBG, interest increased. \\
     Since 2017 NIST added them to Special Publication 800-186, allowing the use by US Federal Government.
   }
   \end{frame}
@@ -99,8 +99,8 @@ Letzte Änderungen dazu durch:
 
   \note{
     RC4 Cipher attacks esp. bad in timing as it was recommended as mitigation against BEAST \\
-    PKCS\#1 v1.5 sowie CBC ciphers ist oftmals Ursprung der Padding Oracle Angriffe.
-    SHA1-Angriff SHAttered
+    PKCS\#1 v1.5 sowie CBC ciphers ist oftmals Ursprung der Padding Oracle Angriffe.  \\
+    Siehe: SHA1-Angriff SHAttered
   }
 \end{frame}
 
@@ -160,7 +160,7 @@ Letzte Änderungen dazu durch:
       Firefox uses Mozilla's Network Security Services (NSS) \\
       Edge uses Microsoft's EdgeHTML on Windows, Apple/KDE's Webkit on iOS, and Chromium's Blink on Android \\
       Opera uses Apple/KDE's Webkit and Chromium's Blink \\
-      Apple Safari apparently allows the use of TLS 1.3, but it is disabled and must be activated with \texttt{defaults write /Library/Preferences/com.apple.networkd tcp_connect_enable_tls13 1}\\
+      Apple Safari apparently allows the use of TLS 1.3, but it is disabled and must be activated with \texttt{defaults write /Library/Preferences/com.apple.networkd tcp\_connect\_enable\_tls13 1}\\
       Tor uses Firefox ESR 60.2 under the hood, which currently only implements the draft-22 version, but they are thinking about backporting NSS changes
     }
 \end{frame}
@@ -203,7 +203,7 @@ Letzte Änderungen dazu durch:
       \draw (0, 1) rectangle (\textwidth / 2,2) node[pos=.5] {Handshake};
       \draw (\textwidth / 2 , 1) rectangle (\textwidth / 2 + \textwidth / 2, 2) node[pos=.5] {Alert};
     \end{tikzpicture}
-    \item Renegotiation zu SSL untersagt
+    \item Renegotiation zu anderen Protokollen oder Cipher Suites ist untersagt
     \item Nutzer-definierte Diffie-Hellmann Gruppen nicht mehr unterstützt
     \item Nur noch Schlüsselaustauschprotokolle, die Perfect Forward Secrecy garantieren:
     \begin{itemize}
@@ -214,9 +214,9 @@ Letzte Änderungen dazu durch:
   \end{itemize}
 
   \note{
-    Entfernen der Custom DHE Groups macht es erst möglich, dass ein ganzer Round Time Trip vom Handshake entfernt werden kann, da der Client einfach welche zu Beginn des Verbindungsaufbaus auswählt und daher nicht erst mit dem Server aushandeln muss, welche benutzt werden müssen
-    Erlaubt sind also nur noch die Schlüsselaustauschprotokolle, die auf ephemeral Diffie-Hellmann (über finite Felder oder elliptic-curve) oder auf einem pre-shared Key aufbauen.
-    Das bedeutet, dass statisches RSA oder DSA gar nicht mehr erlaubt ist.
+    Entfernen der Custom DHE Groups macht es erst möglich, dass ein ganzer Round Time Trip vom Handshake entfernt werden kann, da der Client einfach welche zu Beginn des Verbindungsaufbaus auswählt und daher nicht erst mit dem Server aushandeln muss, welche benutzt werden müssen \\
+    Erlaubt sind also nur noch die Schlüsselaustauschprotokolle, die auf ephemeral Diffie-Hellmann (über finite Felder oder elliptic-curve) oder auf einem pre-shared Key aufbauen. \\
+    Das bedeutet, dass statisches RSA oder DSA gar nicht mehr erlaubt ist. \\
   }
 \end{frame}
 
@@ -233,9 +233,9 @@ Letzte Änderungen dazu durch:
   \end{figure}
 
   \note{
-    ECDHE daher, weil static RSA ab TLS 1.3 nicht mehr unterstützt ist.
-    Bei static RSA würde ServerKeyExchange nicht durchgeführt werden.
-    Base Key zum Verschlüsseln ab EncryptedExtensions hier ist das \texttt{server_handshake_traffic_secret}
+    ECDHE daher, weil static RSA ab TLS 1.3 nicht mehr unterstützt ist. \\
+    Bei static RSA würde ServerKeyExchange nicht durchgeführt werden. \\
+    Base Key zum Verschlüsseln ab EncryptedExtensions hier ist das \texttt{server\_handshake\_traffic\_secret} \\
   }
 \end{frame}
 
@@ -249,9 +249,9 @@ Letzte Änderungen dazu durch:
   \end{figure}
 
   \note{
-    Möglich, da RSA und Custom DH Groups entfernt wurden.
-    Durch festgesetzte finite Gruppen für den Diffie-Hellmann Austausch ist es einfach zu entscheiden, welche Parameter wohl vom Server unterstützt werden (entweder ECDHE mit x25519, P-256).
-    Dadurch kann Client KeyShares direkt mitschicken, es verfällt das Bedürfnis darüber zu verhandeln und wir sparen uns einen RoundTrip
+    Möglich, da RSA und Custom DH Groups entfernt wurden. \\
+    Durch festgesetzte finite Gruppen für den Diffie-Hellmann Austausch ist es einfach zu entscheiden, welche Parameter wohl vom Server unterstützt werden (entweder ECDHE mit x25519, P-256). \\
+    Dadurch kann Client KeyShares direkt mitschicken, es verfällt das Bedürfnis darüber zu verhandeln und wir sparen uns einen RoundTrip \\
   }
 \end{frame}
 
@@ -264,9 +264,9 @@ Letzte Änderungen dazu durch:
     \label{fig:tls13-handshake-zero-rtt}
   \end{figure}
   \note{
-    0-RTT sind anfällig gegenüber Replayattacken
-    Müssen daher idempotent sein, wird geraten nur bei GET zu erlauben
-    Anwesenden fragen, ob sie eventuell Problem mit dem 0-RTT Handshake sehen
+    0-RTT sind anfällig gegenüber Replayattacken \\
+    Müssen daher idempotent sein, wird geraten nur bei GET zu erlauben \\
+    Anwesenden fragen, ob sie eventuell Problem mit dem 0-RTT Handshake sehen \\
   }
 \end{frame}
 
@@ -287,7 +287,7 @@ Letzte Änderungen dazu durch:
   \item Herabstufung von Protokollparametern zu gefährlichen Werten:
   \begin{itemize}
     \item Von TLS 1.2 auf SSL 2.0
-    \item Von DHE (1024-Bit Schlüssel und aufwärts) auf DHE_EXPORT (maximal 512-Bit)
+    \item Von DHE (1024-Bit Schlüssel und aufwärts) auf DHE\_EXPORT (maximal 512-Bit)
   \end{itemize}
   \item Angreifer zwingt Client und Server zu schwächeren Sicherheitsmaßnahmen
   \item Beispielsweise Ändern der Supported Cipher Suite Liste durch Man-in-the-Middle-Angriff
@@ -310,11 +310,11 @@ Letzte Änderungen dazu durch:
   \end{itemize}
 
   \note {
-    Essentiell wird im Precomputation-Schritt eine Matrix aufgebaut, die Log DB, die die Prime-Factorizationen enthält, die gefunden wurden für ein bestimmtes P / eine bestimmte Primzahl. Einmal berechnet, kann der vorberechnete Schritt immer wieder für dieses bestimmte P genutzt werden.
+    Essentiell wird im Precomputation-Schritt eine Matrix aufgebaut, die Log DB, die die Prime-Factorizationen enthält, die gefunden wurden für ein bestimmtes P / eine bestimmte Primzahl. Einmal berechnet, kann der vorberechnete Schritt immer wieder für dieses bestimmte P genutzt werden. \\
 
-    Wichtig ist, dass das alles vorberechnet werden kann.
-    Nur der Descent-Schritt muss zur Laufzeit verarbeitet werden.
-    Hier wird y wieder faktorisiert und durch ein Sieb gelaufen, bis es möglich ist, diese faktorisierten Primzahlen durch vorhandene Elemente in der Log-DB nachzustellen.
+    Wichtig ist, dass das alles vorberechnet werden kann. \\
+    Nur der Descent-Schritt muss zur Laufzeit verarbeitet werden. \\
+    Hier wird y wieder faktorisiert und durch ein Sieb gelaufen, bis es möglich ist, diese faktorisierten Primzahlen durch vorhandene Elemente in der Log-DB nachzustellen. \\
   }
 \end{frame}
 
@@ -329,8 +329,9 @@ Letzte Änderungen dazu durch:
   \end{figure}
 
   \note {
-    Die Eleganz des Angriffs liegt dadrinne, dass ein MitM zur Laufzeit den Verbindungsaufbau des Clients C abfängt und die gewünschte Cipher Suite auf DHE_EXPORT setzt, dessen Primezahlen nicht mehr als 512-Bit haben dürfen.
-    Der Designfehler hier in TLS ist folgender: die ServerKeyExchange Antwort des Servers, hier cert_S ähnelt dem Aufbau für normale DHE Cipher Suites und macht keine Aussage darüber, welche Cipher Suite vom Server gewählt wurde. Dadurch kann der Client nicht bemerken, dass hier auf DHE_EXPORT gewechselt wurde.
+    Die Eleganz des Angriffs liegt dadrinne, dass ein MitM zur Laufzeit den Verbindungsaufbau des Clients C abfängt und die gewünschte Cipher Suite auf DHE\_EXPORT setzt, dessen Primezahlen nicht mehr als 512-Bit haben dürfen. \\
+    Der Designfehler hier in TLS ist folgender: die ServerKeyExchange Antwort des Servers, hier cert\_S ähnelt dem Aufbau für normale DHE Cipher Suites und macht keine Aussage darüber, welche Cipher Suite vom Server gewählt wurde. \\
+    Dadurch kann der Client nicht bemerken, dass hier auf DHE\_EXPORT gewechselt wurde. \\
   }
 \end{frame}
 
@@ -365,9 +366,10 @@ Weitere Fixes gegen generelle Downgrading-Angriffe:
 \end{itemize}
 
 \note{
-  Für TLS 1.2 sieht das hier anders aus:
-  Web Server muss entsprechend konfiguriert werden. Darf keine Nutzer-definierten Gruppen zulassen, keine DHE_EXPORT Cipher Suites.
-  Muss idealerweise mindestens 2048-bit Keys zulassen.
+  Für TLS 1.2 sieht das hier anders aus: \\
+  Web Server muss entsprechend konfiguriert werden.  \\
+  Darf keine Nutzer-definierten Gruppen zulassen, keine DHE\_EXPORT Cipher Suites. \\
+  Muss idealerweise mindestens 2048-bit Keys zulassen. \\
 }
 \end{frame}
 
@@ -398,13 +400,13 @@ Weitere Fixes gegen generelle Downgrading-Angriffe:
   \item CBC MAC-then-Encrypt Modes nicht mehr unterstützt
 \end{itemize}
 \note {
-  Cipher Suite = Chiffrensammlung
-  Definiert Schlüsselaustauschprotokoll (RSA, ECDHE), Authentifizierungsalgorithmus (RSA, DSA, ECDSA),
-  Verschlüsslungalgorithmus (RC4, Triple DES, AES) und Hashfunktion (SHA1, SHA256), MAC-Funktion (HMAC mit SHA1...)
-  TLS_RSA_WITH_3DES_EDE_CBC_SHA
+  Cipher Suite = Chiffrensammlung \\
+  Definiert Schlüsselaustauschprotokoll (RSA, ECDHE), Authentifizierungsalgorithmus (RSA, DSA, ECDSA), \\
+  Verschlüsslungalgorithmus (RC4, Triple DES, AES) und Hashfunktion (SHA1, SHA256), MAC-Funktion (HMAC mit SHA1...) \\
+  TLS\_RSA\_WITH\_3DES\_EDE\_CBC\_SHA \\
 
-  Als Stromchiffre ist nur eben genannte erlaubt,
-  Als Blockchiffre nur AES GCM / CCM.
+  Als Stromchiffre ist nur eben genannte erlaubt, \\
+  Als Blockchiffre nur AES GCM / CCM. \\
 }
 \end{frame}
 
@@ -425,9 +427,6 @@ Nomenklatur: TLS\_AEAD\_HASH
     \item Vaudenay, Lucky13, LuckyMinus20, POODLE, Bleichenbacher (ROBOT)
   \end{itemize}
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Lucky13-Angriff}
 \end{frame}
 
 \begin{frame}{Kompression}
@@ -455,14 +454,10 @@ Cookie: secret=7xc89f94wa
 Cookie: secret=0
 \end{lstlisting}
 \note {
-  Pakete mit secret = 0 bis 6 haben die selbe Länge
-  Paket mit secret=7 ist eins kürzer, da DEFLATE besser komprimieren kann
-  Angreifer kann Secret Byte für Byte rekonstruieren
+  Pakete mit secret = 0 bis 6 haben die selbe Länge \\
+  Paket mit secret=7 ist eins kürzer, da DEFLATE besser komprimieren kann \\
+  Angreifer kann Secret Byte für Byte rekonstruieren \\
 }
-\end{frame}
-
-\begin{frame}{Renegotiation}
-3SHAKE Angriff
 \end{frame}
 
 \section{Fazit}
